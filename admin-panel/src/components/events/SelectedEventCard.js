@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import {DropTarget} from 'react-dnd'
+import {DropTarget, DragSource} from 'react-dnd'
+import flow from 'lodash.flow'
 import {connect} from 'react-redux'
-import {addPersonToEvent} from '../../ducks/events'
+import {addPersonToEvent, EVENT} from '../../ducks/events'
 
 class SelectedEventCard extends Component {
     static propTypes = {
@@ -9,7 +10,7 @@ class SelectedEventCard extends Component {
     };
 
     render() {
-        const {event, connectDropTarget, canDrop, hovered} = this.props
+        const {event, connectDragSource, connectDropTarget, canDrop, hovered} = this.props
         const dndStyle = {
             border: `1px solid ${canDrop 
                 ? hovered 
@@ -17,15 +18,26 @@ class SelectedEventCard extends Component {
                     : 'red'
                 : 'black'}`
         }
-        return connectDropTarget(
+        return connectDragSource(connectDropTarget(
             <div style = {dndStyle}>
                 <h2>{event.title}</h2>
                 <p>{event.where}</p>
                 <p>{event.when}</p>
             </div>
-        )
+        ))
     }
 }
+
+const specEventSource = {
+  beginDrag(props) {
+    return {}
+  }
+}
+
+const collectDrag = (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+})
 
 const spec = {
     drop(props, monitor) {
@@ -46,4 +58,7 @@ const collect = (connect, monitor) => ({
 
 export default connect(
     null, { addPersonToEvent }
-)(DropTarget(['person'], spec, collect)(SelectedEventCard))
+)(flow(
+  DragSource(EVENT, specEventSource, collectDrag),
+  DropTarget(['person'], spec, collect)
+)(SelectedEventCard))

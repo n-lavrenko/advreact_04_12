@@ -8,6 +8,7 @@ import {fbToEntities} from './utils'
 /**
  * Constants
  * */
+
 export const moduleName = 'events'
 const prefix = `${appName}/${moduleName}`
 
@@ -21,6 +22,12 @@ export const FETCH_LAZY_SUCCESS = `${prefix}/FETCH_LAZY_SUCCESS`
 
 export const SELECT = `${prefix}/SELECT`
 export const ADD_PERSON_TO_EVENT = `${prefix}/ADD_PERSON_TO_EVENT`
+
+/**
+ * Item types constants for react-dnd 
+ * */
+
+export const EVENT = `${prefix}/EVENT`
 
 /**
  * Reducer

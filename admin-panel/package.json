@@ -7,6 +7,7 @@
     "firebase": "^4.7.0",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
+    "lodash.flow": "^3.5.0",
     "logger": "^0.0.1",
     "react": "^16.2.0",
     "react-dnd": "^2.5.4",

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {moduleName, fetchLazy, selectEvent, eventListSelector} from '../../ducks/events'
+import {DragSource} from 'react-dnd'
+import {moduleName, fetchLazy, selectEvent, eventListSelector, EVENT} from '../../ducks/events'
 import {Table, Column, InfiniteLoader} from 'react-virtualized'
 import 'react-virtualized/styles.css'
 
@@ -72,7 +73,18 @@ export class EventLazyTable extends Component {
     }
 }
 
+const specEventSource = {
+  beginDrag(props) {
+    return {}
+  }
+}
+
+const collectDrag = (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+})
+
 export default connect(state => ({
     events: eventListSelector(state),
     loading: state[moduleName].loading
-}), {fetchLazy, selectEvent})(EventLazyTable)
+}), {fetchLazy, selectEvent})(DragSource(EVENT, specEventSource, collectDrag)(EventLazyTable))
